@@ -1,0 +1,208 @@
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@using System.Linq
+
+<style>
+
+/* Фон страницы */
+body {
+    background: #0a0e27 !important;
+}
+
+.d-flex.align-items-center.justify-content-center.h-100 {
+    background: #0a0e27 !important;
+    display: block !important;
+    height: auto !important;
+}
+
+/* Скрыть все элементы Layout на этих страницах */
+.navbar { display: none !important; }
+.footer { display: none !important; }
+
+/* Убрать sticky позиционирование у Layout navbar если он всё равно показывается */
+nav:not(.ss-navbar) { display: none !important; }
+footer:not(.ss-footer) { display: none !important; }
+/* Исправить позиционирование ss-navbar */
+.d-flex.align-items-center.justify-content-center.h-100 {
+    display: block !important;
+    height: auto !important;
+}
+
+.ss-navbar {
+    position: fixed !important;
+    top: 0; left: 0; right: 0;
+    width: 100%;
+}
+
+.ss-auth-page {
+    margin-top: 80px;
+}
+
+.ss-footer {
+    margin-top: 0;
+}
+.ss-footer {
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    width: 100vw;
+}
+    .ss-navbar {
+        position: sticky; top: 0; z-index: 100;
+        background: rgba(10,14,39,0.95); backdrop-filter: blur(10px);
+        border-bottom: 1px solid rgba(0,242,254,0.15); padding: 18px 40px;
+        font-family: 'Inter','Segoe UI',sans-serif;
+    }
+    .ss-navbar-inner { max-width:1400px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; }
+    .ss-logo { display:flex; align-items:center; gap:10px; font-size:1.6rem; font-weight:800; text-decoration:none; color:white; letter-spacing:-0.5px; }
+    .ss-logo-accent { color:#00f2fe; }
+    .ss-nav-menu { display:flex; gap:30px; list-style:none; margin:0; padding:0; }
+    .ss-nav-menu a { color:#cbd5e1; text-decoration:none; font-weight:500; padding:8px 18px; border-radius:10px; transition:all 0.2s; font-size:0.95rem; }
+    .ss-nav-menu a:hover { background:rgba(0,242,254,0.1); color:#00f2fe; }
+    .ss-nav-right { display:flex; align-items:center; gap:12px; }
+    .ss-nav-cart { display:flex; align-items:center; gap:8px; padding:10px 18px; border:1px solid rgba(0,242,254,0.3); border-radius:12px; color:#00f2fe; text-decoration:none; font-weight:600; transition:all 0.2s; }
+    .ss-nav-cart:hover { background:rgba(0,242,254,0.1); }
+    .ss-cart-count { background:#00f2fe; color:#0a0e27; width:24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.8rem; font-weight:800; }
+
+    .ss-auth-page { min-height:calc(100vh - 130px); display:flex; align-items:center; justify-content:center; padding:48px 20px; font-family:'Inter','Segoe UI',sans-serif; -webkit-font-smoothing:antialiased; }
+
+    .auth-card { width:100%; max-width:480px; background:linear-gradient(135deg,#1a1a2e 0%,#16213e 100%); border:1px solid rgba(0,242,254,0.2); border-radius:24px; padding:48px 44px; box-shadow:0 25px 80px rgba(0,0,0,0.4); color:#fff; }
+    .auth-logo { display:flex; align-items:center; justify-content:center; gap:8px; font-size:1.5rem; font-weight:800; color:white; text-decoration:none; margin-bottom:28px; }
+    .auth-logo-accent { color:#00f2fe; }
+    .auth-title { margin:0 0 8px; font-size:1.7rem; font-weight:800; letter-spacing:-0.5px; color:#fff; text-align:center; }
+    .auth-subtitle { margin:0 0 28px; font-size:0.9rem; color:#64748b; text-align:center; }
+    .auth-form { display:grid; gap:16px; }
+    .mb-3 { margin-bottom:0 !important; }
+    .form-label { display:block; margin-bottom:6px; font-size:0.83rem; font-weight:600; color:#94a3b8; }
+
+    .form-control { width:100%; min-height:48px; padding:12px 16px; border-radius:12px; border:1px solid rgba(255,255,255,0.1); background:rgba(0,0,0,0.3) !important; color:#ffffff !important; -webkit-text-fill-color:#ffffff !important; caret-color:#ffffff !important; font-size:0.95rem; font-family:'Inter','Segoe UI',sans-serif; outline:none; transition:0.2s ease; box-sizing:border-box; opacity:1 !important; }
+    .form-control::placeholder { color:rgba(255,255,255,0.25) !important; -webkit-text-fill-color:rgba(255,255,255,0.25) !important; }
+    .form-control:focus { border-color:rgba(0,242,254,0.5) !important; box-shadow:0 0 0 3px rgba(0,242,254,0.1) !important; background:rgba(0,0,0,0.4) !important; color:#ffffff !important; outline:none !important; }
+    input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:focus { -webkit-text-fill-color:#ffffff !important; caret-color:#ffffff !important; transition:background-color 9999s ease-in-out 0s; box-shadow:0 0 0 1000px rgba(0,0,0,0.3) inset !important; border:1px solid rgba(255,255,255,0.1) !important; }
+
+    .input-group { display:flex; align-items:stretch; width:100%; }
+    .input-group .form-control { border-top-right-radius:0 !important; border-bottom-right-radius:0 !important; border-right:none !important; }
+    .input-group .btn.btn-secondary { min-width:48px; border-radius:0 12px 12px 0 !important; border:1px solid rgba(255,255,255,0.1) !important; border-left:none !important; background:rgba(0,0,0,0.3) !important; color:#64748b !important; box-shadow:none !important; cursor:pointer; transition:all 0.2s; }
+    .input-group .btn.btn-secondary:hover { background:rgba(0,242,254,0.1) !important; color:#00f2fe !important; }
+    .icon { width:18px; height:18px; }
+
+    .form-check { display:flex; align-items:center; gap:8px; padding-left:0; color:#64748b; font-size:0.83rem; }
+    .form-check-input { width:16px; height:16px; margin:0 !important; accent-color:#00f2fe; flex-shrink:0; }
+    .form-check-label { margin:0; color:#64748b; }
+
+    .btn.btn-primary { display:inline-flex; align-items:center; justify-content:center; width:100%; min-height:48px; padding:0 28px; border-radius:12px; font-size:1rem; font-weight:700; cursor:pointer; transition:0.2s ease; border:none; background:linear-gradient(135deg,#00f2fe 0%,#4facfe 100%) !important; color:#0a0e27 !important; font-family:'Inter','Segoe UI',sans-serif; box-shadow:0 8px 24px rgba(0,242,254,0.25); margin-top:8px; }
+    .btn.btn-primary:hover { transform:translateY(-2px); box-shadow:0 12px 30px rgba(0,242,254,0.4); }
+
+    .row:has(.auth-card) > .col-md-6:last-of-type section { display:none !important; }
+
+    .validation-summary-errors, .text-danger, .field-validation-error { color:#ef4444 !important; font-size:0.83rem; }
+    .validation-summary-errors { padding:12px 16px; border-radius:10px; background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.3); margin-bottom:4px; }
+    .validation-summary-errors ul, .validation-summary-valid ul { margin:0; padding-left:20px; }
+
+    .auth-links { list-style:none; padding:0; margin:16px 0 0; text-align:center; }
+    .auth-links li { padding:4px 0; }
+    .auth-links a { color:#00f2fe; text-decoration:none; font-size:0.875rem; font-weight:600; }
+    .auth-links a:hover { text-decoration:underline; }
+
+    .ss-footer { background:#050818; border-top:1px solid rgba(0,242,254,0.1); padding:30px; text-align:center; color:#64748b; font-size:0.9rem; font-family:'Inter','Segoe UI',sans-serif; }
+    .ss-footer-brand { color:#00f2fe; font-weight:700; }
+
+    @@media (max-width:768px) {
+        .auth-card { padding:32px 24px; border-radius:20px; }
+        .auth-title { font-size:1.4rem; }
+        .ss-navbar { padding:14px 20px; }
+        .ss-nav-menu { display:none; }
+    }
+</style>
+
+<nav class="ss-navbar">
+    <div class="ss-navbar-inner">
+        <a href="/" class="ss-logo">⚔️ Secure<span class="ss-logo-accent">Shop</span></a>
+        <ul class="ss-nav-menu">
+            <li><a href="/">Home</a></li>
+            <li><a href="/shop">Shop</a></li>
+            <li><a href="/generator">🔐 Generator</a></li>
+        </ul>
+        <div class="ss-nav-right">
+            <a href="/cart" class="ss-nav-cart">🛒 <span class="ss-cart-count" id="ss-cart-count">0</span></a>
+        </div>
+    </div>
+</nav>
+
+<div class="ss-auth-page">
+@{
+    var usernameAttempt = ViewData.ModelState["LoginForm.UserName"]?.AttemptedValue ?? "";
+    var rememberMeAttempt = ViewData.ModelState["LoginForm.RememberMe"]?.AttemptedValue ?? "";
+    var rememberChecked = rememberMeAttempt == "true" || rememberMeAttempt == "on";
+}
+<div class="auth-card">
+    
+    <h1 class="auth-title">Welcome back</h1>
+    <p class="auth-subtitle">Sign in to your SecureShop account</p>
+    <form method="post" class="auth-form no-multisubmit" action="/Login">
+        @Html.AntiForgeryToken()
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div class="mb-3">
+            <label class="form-label" for="LoginForm_UserName">Username or email</label>
+            <input class="form-control" autofocus tabindex="1" type="text"
+                   data-val="true" data-val-required="Username is required."
+                   id="LoginForm_UserName" name="LoginForm.UserName"
+                   value="@usernameAttempt" placeholder="Enter username or email" />
+            <span class="text-danger field-validation-valid" data-valmsg-for="LoginForm.UserName" data-valmsg-replace="true"></span>
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="LoginForm_Password">Password</label>
+            <div class="input-group">
+                <input class="form-control" tabindex="2" autocomplete="current-password"
+                       type="password" data-val="true" data-val-required="Password is required."
+                       id="LoginForm_Password" name="LoginForm.Password" placeholder="Enter password" />
+                <button tabindex="-1" class="btn btn-secondary" type="button" id="togglePassword">
+                    <svg class="icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+                        <path fill="currentColor" d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM144 256a144 144 0 1 1 288 0 144 144 0 1 1 -288 0zm144-64c0 35.3-28.7 64-64 64c-7.1 0-13.9-1.2-20.3-3.3c-5.5-1.8-11.9 1.6-11.7 7.4c.3 6.9 1.3 13.8 3.2 20.7c13.7 51.2 66.4 81.6 117.6 67.9s81.6-66.4 67.9-117.6c-11.1-41.5-47.8-69.4-88.6-71.1c-5.8-.2-9.2 6.1-7.4 11.7c2.1 6.4 3.3 13.2 3.3 20.3z"/>
+                    </svg>
+                </button>
+            </div>
+            <span class="text-danger field-validation-valid" data-valmsg-for="LoginForm.Password" data-valmsg-replace="true"></span>
+        </div>
+        <div class="mb-3 form-check">
+            <input name="LoginForm.RememberMe" type="hidden" value="false" />
+            <input class="form-check-input" tabindex="3" type="checkbox"
+                   id="LoginForm_RememberMe" name="LoginForm.RememberMe" value="true"
+                   @(rememberChecked ? "checked" : "") />
+            <label class="form-check-label" for="LoginForm_RememberMe">Remember me</label>
+        </div>
+        <div class="mb-3">
+            <button type="submit" class="btn btn-primary" tabindex="4">🔐 Log in</button>
+        </div>
+        <ul class="auth-links">
+            <li><a href="/ForgotPassword">Forgot password?</a></li>
+            <li style="margin-top:8px;color:#64748b;font-size:0.875rem;">No account? <a href="/Register">Create one →</a></li>
+        </ul>
+    </form>
+</div>
+</div>
+
+<footer class="ss-footer">
+    <p>© 2026 <span class="ss-footer-brand">SecureShop</span> — Your Digital Life, Fully Protected 🛡️</p>
+</footer>
+
+<script>
+(function() {
+    try {
+        var cart = JSON.parse(localStorage.getItem('secureshop_cart') || '[]');
+        var total = cart.reduce(function(s,i){ return s+(i.quantity||1); }, 0);
+        var el = document.getElementById('ss-cart-count');
+        if (el) el.textContent = total;
+    } catch(e) {}
+})();
+document.addEventListener("DOMContentLoaded", function() {
+    var toggle = document.getElementById("togglePassword");
+    var password = document.getElementById("LoginForm_Password");
+    if (toggle && password) {
+        toggle.addEventListener("click", function() {
+            password.type = password.type === "password" ? "text" : "password";
+        });
+    }
+});
+</script>
